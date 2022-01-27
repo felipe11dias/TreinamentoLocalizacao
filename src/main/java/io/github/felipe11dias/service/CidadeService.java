@@ -1,7 +1,11 @@
 package io.github.felipe11dias.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -60,5 +64,14 @@ public class CidadeService {
 	
 	void listarCidades() {
 		cidadeRepository.findAll().forEach(System.out::println);
+	}
+	
+	public List<Cidade> filtroDinamico(Cidade cidade) {
+		ExampleMatcher matcher = ExampleMatcher
+											.matching()
+											.withIgnoreCase()
+											.withStringMatcher(ExampleMatcher.StringMatcher.STARTING);
+		Example<Cidade> exampleCidade = Example.of(cidade, matcher);
+		return cidadeRepository.findAll(exampleCidade);
 	}
 }
