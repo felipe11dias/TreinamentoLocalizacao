@@ -2,6 +2,8 @@ package io.github.felipe11dias.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import io.github.felipe11dias.entity.Cidade;
@@ -14,7 +16,7 @@ public interface CidadeRepository extends JpaRepository<Cidade, Long> {
 	//List<Cidade> findByNomeLike(String nome);
 	
 	// Customiza a busca para buscar de acordo com localização desejada
-	List<Cidade> findByNomeLike(String nome);
+	List<Cidade> findByNomeLike(String nome, Sort sort, Pageable pageable);
 	
 	// Começa com esse nome
 	List<Cidade> findByNomeStartingWith(String nome);
