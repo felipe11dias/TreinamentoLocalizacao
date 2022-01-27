@@ -49,6 +49,14 @@ public class TreinamentoLocalizacaoApplication implements CommandLineRunner{
 		cidadeRepository.findByNome("Fortaleza").forEach(System.out::println);
 	}
 	
+	void listarCidadesPorQuantidadeMenorHabitantes() {
+		cidadeRepository.findByHabitantesLessThan(10000000L).forEach(System.out::println);
+	}
+	
+	void listarCidadesPorQuantidadeMaiorHabitantes() {
+		cidadeRepository.findByHabitantesGreaterThan(10000000L).forEach(System.out::println);
+	}
+	
 	void listarCidadesPorHabitantes() {
 		cidadeRepository.findByHabitantes(80000000L).forEach(System.out::println);
 	}
