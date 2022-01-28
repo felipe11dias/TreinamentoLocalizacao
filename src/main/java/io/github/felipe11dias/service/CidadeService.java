@@ -53,6 +53,13 @@ public class CidadeService {
 		cidadeRepository.findByNome("Fortaleza").forEach(System.out::println);
 	}
 	
+	void listarCidadesPorNomeSQL() {
+		cidadeRepository
+					.findByNomeSqlNativo("Fortaleza")
+					.stream().map(cidadeProjection -> new Cidade(cidadeProjection.getId(), cidadeProjection.getNome(), null))
+					.forEach(System.out::println);
+	}
+	
 	void listarCidadesPorQuantidadeMenorHabitantes() {
 		cidadeRepository.findByHabitantesLessThan(10000000L).forEach(System.out::println);
 	}
