@@ -9,10 +9,13 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import io.github.felipe11dias.entity.Cidade;
 import io.github.felipe11dias.repository.CidadeRepository;
+import io.github.felipe11dias.repository.specs.CidadeSpecs;
 
 @Service
 public class CidadeService {
@@ -73,5 +76,28 @@ public class CidadeService {
 											.withStringMatcher(ExampleMatcher.StringMatcher.STARTING);
 		Example<Cidade> exampleCidade = Example.of(cidade, matcher);
 		return cidadeRepository.findAll(exampleCidade);
+	}
+	
+	void listarCidadeByNomeAndHabitantesSpec() {
+		Specification<Cidade> specs = CidadeSpecs.nomeEqual("Fortaleza").and(CidadeSpecs.habitantesGreaterThan(1000L));
+		cidadeRepository.findAll(specs).forEach(System.out::println);
+	}
+	
+	void listarCidadeSpecsFiltroDinamico(Cidade filtro) {
+		Specification<Cidade> specs = Specification.where((root, query, cb) -> cb.conjunction());
+		
+		if(filtro.getId() != null) {
+			specs = specs.and(CidadeSpecs.idEqual(filtro.getId()));
+		}
+		
+		if(StringUtils.hasText(filtro.getNome())) {
+			specs = specs.and(CidadeSpecs.nomeLike(filtro.getNome()));
+		}
+		
+		if(filtro.getHabitantes() != null) {
+			specs = specs.and(CidadeSpecs.habitantesGreaterThan(filtro.getHabitantes()));
+		}
+		
+		cidadeRepository.findAll(specs).forEach(System.out::println);
 	}
 }
